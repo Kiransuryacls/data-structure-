@@ -96,3 +96,67 @@ tices; ++i)
     bfs(adjList, 0, vertices);
 
     return 0;}
+
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node {
+    int data;
+    struct Node *next;
+};
+typedef struct Node node;
+
+node *create(int data) {
+    node *N = malloc(sizeof(node));
+    N->data = data;
+    N->next = NULL;
+    return N;
+}
+
+void addedge(node *adj[], int u, int v) {
+    node *newnode = create(v);
+    newnode->next = adj[u];
+    adj[u] = newnode;
+}
+
+void dfsUtil(node *adj[], int v, int visited[]) {
+    visited[v] = 1;
+    printf("%d ", v);
+
+    node *temp = adj[v];
+    while (temp != NULL) {
+        int d = temp->data;
+        if (!visited[d]) {
+            dfsUtil(adj, d, visited);
+        }
+        temp = temp->next;
+    }
+}
+
+void dfs(node *adj[], int si, int vertices) {
+    int visited[vertices];
+    for (int i = 0; i < vertices; ++i) {
+        visited[i] = 0;
+    }
+    dfsUtil(adj, si, visited);
+}
+
+int main() {
+    int vertices = 5;
+
+    node *adjList[vertices];
+    for (int i = 0; i < vertices; ++i)
+        adjList[i] = NULL;
+
+    addedge(adjList, 0, 1);
+    addedge(adjList, 0, 2);
+    addedge(adjList, 1, 3);
+    addedge(adjList, 1, 4);
+    addedge(adjList, 2, 4);
+
+    printf("Depth First Traversal starting from vertex 0: ");
+    dfs(adjList, 0, vertices);
+
+    return 0;
+}
+
